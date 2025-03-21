@@ -27,6 +27,7 @@
     --red: #ed4245;
     --twitch-darkest: #1a1d23;
     --twitch-dark-bg: #1f2329;
+    --orange: #e67e22;
 }
 
 * {
@@ -84,8 +85,13 @@ body {
     align-items: center;
     gap: 8px;
     overflow-x: hidden;
-    overflow-y: scroll;
-    padding-right: 0;
+    overflow-y: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+}
+
+.server-list::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
 }
 
 .server-group {
@@ -160,6 +166,17 @@ body {
     transform: translateY(-50%) scale(1);
 }
 
+/* Home Icon */
+.server-icon.home-icon {
+    color: var(--discord-light);
+    font-size: 20px;
+}
+
+.server-icon.home-icon:hover {
+    color: var(--discord-lighter);
+    background-color: var(--discord-green);
+}
+
 /* Social Icons */
 .social-group {
     margin-top: 12px;
@@ -167,26 +184,52 @@ body {
 
 .social-icon {
     font-size: 24px;
+    margin-bottom: 4px;
+    transition: transform 0.2s ease, border-radius 0.2s ease;
+}
+
+.social-icon:hover {
+    transform: translateY(-2px);
 }
 
 .social-icon.youtube {
     color: #ff0000;
 }
 
+.social-icon.youtube:hover {
+    background-color: rgba(255, 0, 0, 0.2);
+}
+
 .social-icon.instagram {
     color: #e1306c;
+}
+
+.social-icon.instagram:hover {
+    background-color: rgba(225, 48, 108, 0.2);
 }
 
 .social-icon.tiktok {
     color: #69c9d0;
 }
 
+.social-icon.tiktok:hover {
+    background-color: rgba(105, 201, 208, 0.2);
+}
+
 .social-icon.discord {
     color: #5865F2;
 }
 
+.social-icon.discord:hover {
+    background-color: rgba(88, 101, 242, 0.2);
+}
+
 .social-icon.twitch {
     color: #9146FF;
+}
+
+.social-icon.twitch:hover {
+    background-color: rgba(145, 70, 255, 0.2);
 }
 
 /* Channel Sidebar Styles */
@@ -564,82 +607,35 @@ body {
 /* Rules Category Styles */
 .rules-category {
     margin-bottom: 30px;
-    background-color: var(--discord-darkest);
-    border-radius: 8px;
-    overflow: hidden;
-    border-left: 4px solid var(--discord-blue);
-}
-
-#twitch-rules .rules-category {
-    border-left: 4px solid var(--twitch-purple);
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--discord-divider);
 }
 
 .rules-category h3 {
-    font-size: 18px;
-    padding: 15px 20px;
-    margin: 0;
-    background-color: var(--discord-darker);
-    color: var(--discord-light);
-    font-weight: 600;
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--discord-lighter);
     display: flex;
     align-items: center;
-    gap: 10px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-#twitch-rules .rules-category h3 {
-    background-color: var(--twitch-dark-bg);
+    gap: 8px;
 }
 
 .rules-category h3 i {
     color: var(--discord-blue);
-    font-size: 20px;
 }
 
-#twitch-rules .rules-category h3 i {
-    color: var(--twitch-purple);
-}
-
-/* Rule Item Styles */
 .rule-item {
-    padding: 15px 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    transition: background-color 0.2s;
-    position: relative;
-}
-
-.rule-item:last-child {
-    border-bottom: none;
-}
-
-.rule-item:hover {
-    background-color: rgba(47, 49, 54, 0.6);
-}
-
-.rule-item:before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-    background-color: transparent;
-    transition: background-color 0.2s;
-}
-
-.rule-item:hover:before {
-    background-color: var(--discord-blue);
-}
-
-#twitch-rules .rule-item:hover:before {
-    background-color: var(--twitch-purple);
+    margin-bottom: 16px;
+    padding-left: 16px;
+    transition: background-color 0.3s ease;
 }
 
 .rule-title {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 600;
     margin-bottom: 8px;
-    color: var(--discord-lighter);
+    color: var(--discord-light);
     display: flex;
     align-items: center;
     gap: 8px;
@@ -647,25 +643,106 @@ body {
 
 .rule-title i {
     color: var(--discord-blue);
-    font-size: 18px;
-}
-
-#twitch-rules .rule-title i {
-    color: var(--twitch-purple);
+    width: 20px;
+    text-align: center;
 }
 
 .rule-content {
-    font-size: 14px;
     color: var(--discord-text);
-    line-height: 1.5;
+    padding-left: 28px;
+    line-height: 1.6;
 }
 
-.rule-examples {
+.rule-content p {
+    margin-bottom: 8px;
+}
+
+.rule-content p:last-child {
+    margin-bottom: 0;
+}
+
+/* Rule Punishment Indicators */
+.rule-severity {
     margin-top: 12px;
-    font-size: 13px;
+    padding-left: 28px;
+}
+
+.punishment-meter {
     background-color: rgba(32, 34, 37, 0.6);
     border-radius: 4px;
     padding: 8px 12px;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+}
+
+.punishment-meter.request span {
+    color: var(--green);
+}
+
+.punishment-meter.warning span {
+    color: var(--yellow);
+}
+
+.punishment-meter.mute span {
+    color: var(--orange);
+}
+
+.punishment-meter.ban span {
+    color: var(--red);
+}
+
+.punishment-bar {
+    height: 6px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    margin-top: 6px;
+    overflow: hidden;
+    display: flex;
+}
+
+.punishment-step {
+    height: 100%;
+    flex: 1;
+    margin-right: 2px;
+    opacity: 0.3;
+}
+
+.punishment-step:last-child {
+    margin-right: 0;
+}
+
+.punishment-meter.request .punishment-step:nth-child(1) {
+    background-color: var(--green);
+    opacity: 1;
+}
+
+.punishment-meter.warning .punishment-step:nth-child(-n+2) {
+    background-color: var(--yellow);
+    opacity: 1;
+}
+
+.punishment-meter.mute .punishment-step:nth-child(-n+3) {
+    background-color: var(--orange);
+    opacity: 1;
+}
+
+.punishment-meter.ban .punishment-step:nth-child(-n+4) {
+    background-color: var(--red);
+    opacity: 1;
+}
+
+/* Rule Examples */
+.rule-examples {
+    margin-top: 12px;
+    padding-left: 28px;
+}
+
+.example-container {
+    background-color: rgba(32, 34, 37, 0.6);
+    border-radius: 4px;
+    padding: 8px 12px;
+    font-size: 14px;
 }
 
 .example {
@@ -673,10 +750,17 @@ body {
     display: flex;
     align-items: flex-start;
     gap: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.example:last-child {
+    border-bottom: none;
 }
 
 .example i {
     margin-top: 2px;
+    width: 16px;
+    text-align: center;
 }
 
 .example.good i {
@@ -687,53 +771,70 @@ body {
     color: var(--red);
 }
 
-.rule-severity {
-    margin-top: 12px;
+.example-text {
+    flex: 1;
+    line-height: 1.5;
 }
 
-.severity-meter {
-    background-color: rgba(32, 34, 37, 0.6);
+/* Toggle Buttons for Examples and Punishment */
+.example-toggle,
+.punishment-toggle {
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--discord-light);
+    background-color: rgba(47, 49, 54, 0.3);
+    padding: 6px 12px;
     border-radius: 4px;
-    padding: 8px 12px;
-    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+    transition: background-color 0.2s ease;
 }
 
-.severity-meter.low span {
-    color: var(--green);
+.example-toggle:hover,
+.punishment-toggle:hover {
+    background-color: rgba(47, 49, 54, 0.6);
 }
 
-.severity-meter.medium span {
-    color: var(--yellow);
+.example-toggle i,
+.punishment-toggle i {
+    font-size: 12px;
+    transition: transform 0.2s ease;
 }
 
-.severity-meter.high span {
-    color: var(--red);
+/* Twitch Section Specific Styles */
+#twitch-rules .rules-category {
+    border-left: 4px solid var(--twitch-purple);
 }
 
-.severity-bar {
-    height: 6px;
-    background-color: rgba(255, 255, 255, 0.1);
-    border-radius: 3px;
-    margin-top: 6px;
-    overflow: hidden;
+#twitch-rules .rules-category h3 i {
+    color: var(--twitch-purple);
 }
 
-.severity-meter.low .severity-fill {
-    background-color: var(--green);
-    width: 30%;
-    height: 100%;
+#twitch-rules .rule-title i {
+    color: var(--twitch-purple);
 }
 
-.severity-meter.medium .severity-fill {
-    background-color: var(--yellow);
-    width: 60%;
-    height: 100%;
+/* Rules Footer */
+.rules-footer {
+    margin-top: 40px;
+    padding: 20px;
+    background-color: rgba(88, 101, 242, 0.1);
+    border-radius: 8px;
+    border-left: 4px solid var(--discord-blue);
 }
 
-.severity-meter.high .severity-fill {
-    background-color: var(--red);
-    width: 90%;
-    height: 100%;
+.rules-footer p {
+    color: var(--discord-lighter);
+    font-size: 16px;
+    line-height: 1.6;
+    text-align: center;
+}
+
+.rules-footer strong {
+    color: var(--discord-blue);
+    font-weight: 700;
 }
 
 /* Tab Containers */
@@ -958,36 +1059,30 @@ body {
 }
 
 /* Tooltip Styles */
-[data-tooltip] {
-    position: relative;
-}
-
-[data-tooltip]:hover::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    left: 60px;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: var(--discord-darkest);
-    color: var(--discord-light);
+.tooltip {
+    position: fixed;
+    background-color: var(--discord-dark);
+    color: var(--discord-lighter);
     padding: 8px 12px;
-    border-radius: 4px;
+    border-radius: 5px;
     font-size: 14px;
-    font-weight: 500;
-    white-space: nowrap;
     z-index: 1000;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.24);
+    pointer-events: none;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    white-space: nowrap;
 }
 
-[data-tooltip]:hover::before {
+.tooltip::after {
     content: '';
     position: absolute;
-    left: 56px;
-    top: 50%;
-    transform: translateY(-50%);
-    border: 5px solid transparent;
-    border-right-color: var(--discord-darkest);
-    z-index: 1000;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid var(--discord-dark);
 }
 
 /* Scrollbar Styles */
@@ -1087,10 +1182,333 @@ body {
     }
 }
 
+/* Search Highlighting */
+.highlight {
+    background-color: rgba(255, 255, 0, 0.3);
+    color: #fff;
+    border-radius: 2px;
+    padding: 0 2px;
+}
+
+/* Rule Item Hover Effect */
+.rule-item.hover {
+    background-color: rgba(47, 49, 54, 0.3);
+    border-radius: 4px;
+}
+
 html, body {
     margin: 0;
     padding: 0;
     overflow: hidden;
     width: 100vw;
     max-width: 100vw;
+}
+
+/* Tab Container Styles */
+.tab-container {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.tabs {
+    display: flex;
+    border-bottom: 2px solid var(--twitch-dark);
+    margin-bottom: 20px;
+}
+
+.tab {
+    padding: 10px 20px;
+    cursor: pointer;
+    color: var(--discord-light);
+    font-weight: 500;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.tab:hover {
+    color: var(--twitch-light);
+}
+
+.tab.active {
+    color: var(--twitch-purple);
+}
+
+.tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--twitch-purple);
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Subscription Styles */
+.subscription-info {
+    padding: 20px;
+    background-color: rgba(20, 20, 20, 0.3);
+    border-radius: 8px;
+}
+
+.tier {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: rgba(30, 30, 30, 0.5);
+    border-radius: 8px;
+    border-left: 4px solid var(--twitch-purple);
+}
+
+.tier-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.tier-badge {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    font-size: 14px;
+}
+
+.tier-1 {
+    background-color: #9146FF;
+    color: white;
+}
+
+.tier-2 {
+    background-color: #9146FF;
+    color: white;
+}
+
+.tier-3 {
+    background-color: #9146FF;
+    color: white;
+}
+
+.tier-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+}
+
+.tier-benefits {
+    list-style-type: none;
+    padding-left: 55px;
+}
+
+.tier-benefits li {
+    margin-bottom: 8px;
+    position: relative;
+}
+
+.tier-benefits li::before {
+    content: '•';
+    position: absolute;
+    left: -15px;
+    color: var(--twitch-purple);
+}
+
+/* Schedule Styles */
+.schedule-info {
+    padding: 20px;
+    background-color: rgba(20, 20, 20, 0.3);
+    border-radius: 8px;
+}
+
+.schedule-note {
+    font-style: italic;
+    color: var(--discord-text-muted);
+    margin: 10px 0 20px;
+}
+
+.schedule-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.schedule-day {
+    background-color: rgba(30, 30, 30, 0.5);
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid var(--twitch-purple);
+}
+
+.day-name {
+    font-weight: 700;
+    font-size: 18px;
+    margin-bottom: 8px;
+    color: white;
+}
+
+.stream-time {
+    color: var(--twitch-light);
+    margin-bottom: 5px;
+}
+
+.stream-game {
+    color: var(--discord-light);
+}
+
+/* Channel Points Styles */
+.points-info {
+    padding: 20px;
+    background-color: rgba(20, 20, 20, 0.3);
+    border-radius: 8px;
+}
+
+.rewards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.reward-item {
+    background-color: rgba(30, 30, 30, 0.5);
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid var(--twitch-purple);
+}
+
+.reward-cost {
+    display: inline-block;
+    background-color: var(--twitch-purple);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.reward-name {
+    font-weight: 600;
+    font-size: 16px;
+    color: white;
+    margin-bottom: 5px;
+}
+
+.reward-description {
+    color: var(--discord-light);
+    font-size: 14px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .server-list {
+        width: 60px;
+    }
+    
+    .channel-sidebar {
+        width: 200px;
+    }
+    
+    .content-area {
+        margin-left: 260px;
+    }
+    
+    .welcome-header h1 {
+        font-size: 24px;
+    }
+    
+    .welcome-header h2 {
+        font-size: 18px;
+    }
+    
+    .rule-title {
+        font-size: 16px;
+    }
+    
+    .rule-content {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 576px) {
+    .discord-container {
+        flex-direction: column;
+    }
+    
+    .server-list {
+        width: 100%;
+        height: 60px;
+        flex-direction: row;
+        justify-content: center;
+        padding: 0;
+    }
+    
+    .server-group {
+        flex-direction: row;
+        gap: 10px;
+    }
+    
+    .server-divider {
+        width: 1px;
+        height: 30px;
+    }
+    
+    .channel-sidebar {
+        width: 100%;
+        height: auto;
+        position: static;
+    }
+    
+    .content-area {
+        margin-left: 0;
+        width: 100%;
+    }
+    
+    .user-area {
+        display: none;
+    }
+    
+    .welcome-header h1 {
+        font-size: 20px;
+    }
+    
+    .welcome-header h2 {
+        font-size: 16px;
+    }
+    
+    .rule-title {
+        font-size: 15px;
+    }
+    
+    .rule-content {
+        font-size: 13px;
+        padding-left: 15px;
+    }
+    
+    .rule-severity,
+    .rule-examples {
+        padding-left: 15px;
+    }
 }
